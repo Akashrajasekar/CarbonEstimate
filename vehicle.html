@@ -1,0 +1,448 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Carbon Emission Calculator</title>
+    <style>
+    @import url(https://fonts.googleapis.com/css?family=Open+Sans);
+
+    body {
+            margin-top: 50px;
+            position: relative; /* Make the body a positioning context for absolute elements */
+            background: #dbe6dc;
+        }
+
+    h1 {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 4rem;
+            font-weight: 500;
+            line-height: 32px;
+            margin: 0 0 72px;
+            text-align: center;
+            font-style: italic;
+            position: absolute; /* Position the h1 element absolutely */
+            top: 0; /* Move the h1 element to the top of the body */
+            left: 50%; /* Center the h1 element horizontally */
+            transform: translateX(-50%); /* Adjust the centering */
+            width: 100%; /* Make the h1 element span the full width */
+            color: #0d4237;
+
+        }
+        .container {
+        display: flex;
+        justify-content: center;
+        font-family: Roboto, Arial, sans-serif;
+        font-size: 15px;
+        margin: 0;
+        padding-top: 170px; /* Add padding at the top of the container to create space for h1 */
+        border: none; /* Remove the outline */
+        background-color: transparent; /* Make the container transparent */
+        box-shadow: none; /* Remove any box shadow if present */
+    }
+    .emission{
+        width: 100%; /* Full width */
+        padding: 6px; /* Some padding */
+        font-family: 'Open Sans', sans-serif;
+        font-weight: 300;
+        border-radius: 4px; /* Rounded borders */
+        box-sizing: border-box; /* Make sure that padding and width stays in place */
+        margin-top: 3px; /* Add a top margin */
+        margin-bottom: 8px; /* Bottom margin */
+        resize: vertical; /* Allow the user to vertically resize the textarea (not horizontally) */
+        background-color: rgba(0, 0, 0, 0.5);
+        color: #ccc;
+      }
+      .emission:before {
+	background-image: url("https://i.postimg.cc/8CrqQhJL/cool-background.jpg");
+	width: 100%;
+	height: 100%;
+	background-size: cover;
+	content: "";
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	z-index: -1;
+	display: block;
+	filter: blur(2px);
+}
+      button {
+      background-color: #8ebf42;
+      color: white;
+      border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100%;
+        font-size: 18px;
+        padding: 10px;
+        margin: 20px 0px;
+      }
+      .form-group label,
+        .form-group input,
+        .form-group select {
+        margin-bottom: 10px;
+        width: 100%; /* Full width */
+        padding: 6px; /* Some padding */
+        font-family: 'Open Sans', sans-serif;
+        font-weight: 300;
+        border-radius: 4px; /* Rounded borders */
+        box-sizing: border-box; /* Make sure that padding and width stays in place */
+        margin-top: 3px; /* Add a top margin */
+        resize: vertical; /* Allow the user to vertically resize the textarea (not horizontally) */
+        background-color: rgba(0, 0, 0, 0.5);
+        color: #ccc;
+        }
+        #vehicle-fields label,
+        #vehicle-fields select{
+            margin-bottom: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <h1 style="text-align:center;"><span style="font-weight:bold">C</span>arbon<span style="font-weight:bold">E</span>stimate</h1>
+    <div class="container">
+
+        <form id="carbon-form2">
+
+            <div class="emission">
+                <h3>Enter the following information about your personal vehicle/vehicles:</h3>
+            <div class="form-group">
+                <div class="form-group" id="subFormContainer">
+                    <label for="vehicle_no">Number of Vehicles</label>
+                    <input type="number" id="vehicle_no" name="vehicle_no" value="0" min="0" onchange="createSubForm()">
+                </div>
+            </div>
+            <div id="vehicle-fields">
+            </div>
+            <button style="text-align:centre;" type="submit" onclick="submitFormPage2()" id="next">Next</button>
+            </div>
+            <script>
+                function createSubForm() {
+                    var container = document.getElementById("vehicle-fields");
+
+                    if (container.childElementCount === 0) {
+
+                        var numVehicles = parseInt(document.getElementById("vehicle_no").value);
+                        for (var i = 1; i <= numVehicles; i++) {
+                            var vehicleDiv = document.createElement("div");
+                            vehicleDiv.className = "form-group";
+
+                            var vehicleLabel = document.createElement("label");
+                            vehicleLabel.innerHTML = "Vehicle Type " + i + "";
+                            vehicleDiv.appendChild(vehicleLabel);
+
+                            var vehicleSelect = document.createElement("select");
+                            vehicleSelect.id = "Vehicle" + i;
+                            vehicleSelect.name = "Vehicle" + i;
+                            vehicleSelect.required = true;
+
+                            var option1 = document.createElement("option");
+                            option1.value = "";
+                            option1.text = "Select Type";
+                            vehicleSelect.appendChild(option1);
+
+                            var option2 = document.createElement("option");
+                            option2.value = "Compact car";
+                            option2.text = "Compact car";
+                            vehicleSelect.appendChild(option2);
+
+                            var option3 = document.createElement("option");
+                            option3.value = "Mid-range car";
+                            option3.text = "Mid-range car";
+                            vehicleSelect.appendChild(option3);
+
+                            var option4 = document.createElement("option");
+                            option4.value = "Luxury / SUV / Van";
+                            option4.text = "Luxury / SUV / Van";
+                            vehicleSelect.appendChild(option4);
+
+                            vehicleDiv.appendChild(vehicleSelect);
+                            container.appendChild(vehicleDiv);
+
+
+
+                            var fuelDiv = document.createElement("div");
+                            fuelDiv.className = "form-group";
+
+                            var fuelLabel = document.createElement("label");
+                            fuelLabel.innerHTML = "Fuel Type " + i + "";
+                            fuelDiv.appendChild(fuelLabel);
+
+                            var fuelSelect = document.createElement("select");
+                            fuelSelect.id = "Fuel Type" + i;
+                            fuelSelect.name = "Fuel Type" + i;
+                            fuelSelect.required = true;
+
+                            var option1 = document.createElement("option");
+                            option1.value = "";
+                            option1.text = "Select Type";
+                            fuelSelect.appendChild(option1);
+
+                            var option2 = document.createElement("option");
+                            option2.value = "Biodiesel";
+                            option2.text = "Biodiesel";
+                            fuelSelect.appendChild(option2);
+
+                            var option3 = document.createElement("option");
+                            option3.value = "Biogas";
+                            option3.text = "Biogas";
+                            fuelSelect.appendChild(option3);
+
+                            var option4 = document.createElement("option");
+                            option4.value = "E10(Ethanol)";
+                            option4.text = "E10(Ethanol)";
+                            fuelSelect.appendChild(option4);
+
+                            var option5 = document.createElement("option");
+                            option5.value = "E85(Ethanol)";
+                            option5.text = "E85(Ethanol)";
+                            fuelSelect.appendChild(option5);
+
+                            var option6 = document.createElement("option");
+                            option6.value = "Electric";
+                            option6.text = "Electric";
+                            fuelSelect.appendChild(option6);
+
+                            var option7 = document.createElement("option");
+                            option7.value = "Hybrid";
+                            option7.text = "Hybrid";
+                            fuelSelect.appendChild(option7);
+
+                            var option8 = document.createElement("option");
+                            option8.value = "Natural Gas";
+                            option8.text = "Natural Gas";
+                            fuelSelect.appendChild(option8);
+
+                            var option9 = document.createElement("option");
+                            option9.value = "Petrol";
+                            option9.text = "Petrol";
+                            fuelSelect.appendChild(option9);
+
+                            var option10 = document.createElement("option");
+                            option10.value = "Plug-in Hybrid";
+                            option10.text = "Plug-in Hybrid";
+                            fuelSelect.appendChild(option10);
+
+                            fuelDiv.appendChild(fuelSelect);
+                            container.appendChild(fuelDiv);
+
+                             var disDiv = document.createElement("div");
+                            disDiv.className = "form-group";
+
+                            var disLabel = document.createElement("label");
+                            disLabel.innerHTML = "Distance" + i +"";
+                            disDiv.appendChild(disLabel);
+
+                            var disInput = document.createElement("input");
+                            disInput.type = "number";
+                            disInput.id = "Distance" + i;
+                            disInput.name = "Distance" + i;
+                            disInput.required = true;
+                            disDiv.appendChild(disInput);
+
+                            container.appendChild(disDiv);
+                        }
+                    } else {
+
+                        var numVehicles = parseInt(document.getElementById("vehicle_no").value);
+
+                        var currentVehicles = container.childElementCount / 2;
+
+                        if (numVehicles < currentVehicles) {
+
+                            for (var i = currentVehicles; i > numVehicles; i--) {
+                                container.removeChild(container.lastElementChild);
+                                container.removeChild(container.lastElementChild);
+                            }
+                        } else if (numVehicles > currentVehicles) {
+
+                            for (var i = currentVehicles + 1; i <= numVehicles; i++) {
+                                var vehicleDiv = document.createElement("div");
+                                vehicleDiv.className = "form-group";
+
+                                var vehicleLabel = document.createElement("label");
+                                vehicleLabel.innerHTML = "Vehicle Type " + i + "";
+                                vehicleDiv.appendChild(vehicleLabel);
+
+                                var vehicleSelect = document.createElement("select");
+                                vehicleSelect.id = "Vehicle" + i;
+                                vehicleSelect.name = "Vehicle" + i;
+                                vehicleSelect.required = true;
+
+                                var option1 = document.createElement("option");
+                                option1.value = "";
+                                option1.text = "Select Type";
+                                vehicleSelect.appendChild(option1);
+
+                                var option2 = document.createElement("option");
+                                option2.value = "Compact car";
+                                option2.text = "Compact car";
+                                vehicleSelect.appendChild(option2);
+
+                                var option3 = document.createElement("option");
+                                option3.value = "Mid-range car";
+                                option3.text = "Mid-range car";
+                                vehicleSelect.appendChild(option3);
+
+                                var option4 = document.createElement("option");
+                                option4.value = "Luxury / SUV / Van";
+                                option4.text = "Luxury / SUV / Van";
+                                vehicleSelect.appendChild(option4);
+
+                                vehicleDiv.appendChild(vehicleSelect);
+                                container.appendChild(vehicleDiv);
+
+                                var fuelDiv = document.createElement("div");
+                                fuelDiv.className = "form-group";
+
+                                /*var fuelLabel = document.createElement("label");
+                                fuelLabel.innerHTML = "Fuel Type " + i + ":";
+                                fuelDiv.appendChild(fuelLabel);
+
+                                var fuelInput = document.createElement("input");
+                                fuelInput.type = "text";
+                                fuelInput.id = "FuelType" + i;
+                                fuelInput.name = "FuelType" + i;
+                                fuelInput.required = true;
+                                fuelDiv.appendChild(fuelInput);
+
+                                container.appendChild(fuelDiv);*/
+                                var fuelLabel = document.createElement("label");
+                                fuelLabel.innerHTML = "Fuel Type " + i + "";
+                                fuelDiv.appendChild(fuelLabel);
+
+                                var fuelSelect = document.createElement("select");
+                                fuelSelect.id = "Fuel" + i;
+                                fuelSelect.name = "Fuel" + i;
+                                fuelSelect.required = true;
+
+                                var option1 = document.createElement("option");
+                                option1.value = "";
+                                option1.text = "Select Type";
+                                fuelSelect.appendChild(option1);
+
+                                var option2 = document.createElement("option");
+                                option2.value = "Biodiesel";
+                                option2.text = "Biodiesel";
+                                fuelSelect.appendChild(option2);
+
+                                var option3 = document.createElement("option");
+                                option3.value = "Biogas";
+                                option3.text = "Biogas";
+                                fuelSelect.appendChild(option3);
+
+                                var option4 = document.createElement("option");
+                                option4.value = "E10(Ethanol)";
+                                option4.text = "E10(Ethanol)";
+                                fuelSelect.appendChild(option4);
+
+                                var option4 = document.createElement("option");
+                                option4.value = "E85(Ethanol)";
+                                option4.text = "E85(Ethanol)";
+                                fuelSelect.appendChild(option4);
+
+                                var option4 = document.createElement("option");
+                                option4.value = "Electric";
+                                option4.text = "Electric";
+                                fuelSelect.appendChild(option4);
+
+                                var option4 = document.createElement("option");
+                                option4.value = "Hybrid";
+                                option4.text = "Hybrid";
+                                fuelSelect.appendChild(option4);
+
+                                var option4 = document.createElement("option");
+                                option4.value = "Natural Gas";
+                                option4.text = "Natural Gas";
+                                fuelSelect.appendChild(option4);
+
+                                var option4 = document.createElement("option");
+                                option4.value = "Petrol";
+                                option4.text = "Petrol";
+                                fuelSelect.appendChild(option4);
+
+                                var option4 = document.createElement("option");
+                                option4.value = "Plug-in Hybrid";
+                                option4.text = "Plug-in Hybrid";
+                                fuelSelect.appendChild(option4);
+
+                                fuelDiv.appendChild(fuelSelect);
+                                container.appendChild(fuelDiv);
+                            }
+                        }
+                    }
+                }
+            </script>
+
+
+
+
+
+
+        </form>
+
+    </div>
+
+    <!--<script>
+        document.getElementById("next").addEventListener("click", function(event) {
+            event.preventDefault(); // Prevent the default form submission behavior
+            window.location.href = "../flight.html";
+        });
+                document.getElementById("carbon-form2").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent the default form submission behavior
+
+            const formData = new FormData(this);
+
+            // Make an AJAX POST request to the Flask API endpoint for electricity data
+            fetch('/electricity', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Assuming the response has a key 'total_carbon_emission'
+                const totalCarbonEmission = data.total_carbon_emission;
+                // Redirect to the results page with the calculated data as URL parameter
+                window.location.href = `/results?total_carbon_emission=${encodeURIComponent(totalCarbonEmission)}`;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+                });
+    </script>-->
+    <script>
+        document.getElementById("carbon-form2").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent the default form submission behavior
+          console.log("Form submitted");
+        const formData = new FormData(event.target);
+        console.log("Form data:", formData);
+        fetch('/vehicle2', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+        console.log("API response:", data);
+        if (data.error) {
+                        // Handle API error response if needed
+                        console.error(data.error);
+         } else {
+          const vehicleEmission = parseFloat(data.vehicle_emission);
+          const urlParams1 = new URLSearchParams(window.location.search);
+          const electricityEmission1 = parseFloat(urlParams1.get('electricity_emission'));
+          const totalEmission1 = electricityEmission1 + vehicleEmission;
+          window.location.href = `/flight.html?electricity_emission=${encodeURIComponent(electricityEmission1)}&vehicle_emission=${encodeURIComponent(vehicleEmission)}&total_emission=${encodeURIComponent(totalEmission1)}`;
+
+         }
+
+         })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+    </script>
+
+</body>
+</html>
