@@ -1,0 +1,288 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Carbon Emission Calculator</title>
+    <style>
+    @import url(https://fonts.googleapis.com/css?family=Open+Sans);
+
+    body {
+            margin-top: 50px;
+            position: relative; /* Make the body a positioning context for absolute elements */
+            background: #dbe6dc;
+        }
+
+    h1 {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 4rem;
+            font-weight: 500;
+            line-height: 32px;
+            margin: 0 0 72px;
+            text-align: center;
+            font-style: italic;
+            position: absolute; /* Position the h1 element absolutely */
+            top: 0; /* Move the h1 element to the top of the body */
+            left: 50%; /* Center the h1 element horizontally */
+            transform: translateX(-50%); /* Adjust the centering */
+            width: 100%; /* Make the h1 element span the full width */
+            color: #0d4237;
+
+        }
+        .container {
+        display: flex;
+        justify-content: center;
+        font-family: Roboto, Arial, sans-serif;
+        font-size: 15px;
+        margin: 0;
+        padding-top: 170px; /* Add padding at the top of the container to create space for h1 */
+        border: none; /* Remove the outline */
+        background-color: transparent; /* Make the container transparent */
+        box-shadow: none; /* Remove any box shadow if present */
+    }
+    .emission{
+        width: 100%; /* Full width */
+        padding: 6px; /* Some padding */
+        font-family: 'Open Sans', sans-serif;
+        font-weight: 300;
+        border-radius: 4px; /* Rounded borders */
+        box-sizing: border-box; /* Make sure that padding and width stays in place */
+        margin-top: 3px; /* Add a top margin */
+        margin-bottom: 8px; /* Bottom margin */
+        resize: vertical; /* Allow the user to vertically resize the textarea (not horizontally) */
+        background-color: rgba(0, 0, 0, 0.5);
+        color: #ccc;
+      }
+      .emission:before {
+	background-image: url("https://i.postimg.cc/8CrqQhJL/cool-background.jpg");
+	width: 100%;
+	height: 100%;
+	background-size: cover;
+	content: "";
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	z-index: -1;
+	display: block;
+	filter: blur(2px);
+}
+      button {
+      background-color: #8ebf42;
+      color: white;
+      border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100%;
+        font-size: 18px;
+        padding: 10px;
+        margin: 20px 0px;
+      }
+      .form-group label,
+        .form-group input,
+        .form-group select {
+        margin-bottom: 10px;
+        width: 100%; /* Full width */
+        padding: 6px; /* Some padding */
+        font-family: 'Open Sans', sans-serif;
+        font-weight: 300;
+        border-radius: 4px; /* Rounded borders */
+        box-sizing: border-box; /* Make sure that padding and width stays in place */
+        margin-top: 3px; /* Add a top margin */
+        resize: vertical; /* Allow the user to vertically resize the textarea (not horizontally) */
+        background-color: rgba(0, 0, 0, 0.5);
+        color: #ccc;
+        }
+        #vehicle-fields label,
+        #vehicle-fields select{
+            margin-bottom: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <h1 style="text-align:center;"><span style="font-weight:bold">C</span>arbon<span style="font-weight:bold">E</span>stimate</h1>
+    <div class="container">
+
+        <form id="carbon-form3">
+
+            <div class="emission">
+                <h3>Enter your flight details below:</h3>
+                <p>Note: Please enter the three letter IATA code of the airport for the <span style="font-weight:bold">'From'</span> and <span style="font-weight:bold">'To'</span> details</p>
+            <div class="form-group">
+                <label for="Passengers">Number of Passengers</label>
+                <input type="number" id="passengers" name="passengers" min="0" required>
+            </div>
+            <div class="form-group">
+                <div class="form-group" id="subFormContainer1">
+                    <label for="trip_no">Number of Trips</label>
+                    <input type="number" id="Trips" name="Trips" value="0" min="0" onchange="createSubForm1()">
+                </div>
+            </div>
+            <div id="trip-fields">
+            </div>
+            <button style="text-align:centre;" type="submit" onclick="submitFormPage3()" id="next">Next</button>
+            </div>
+            <script>
+                function createSubForm1() {
+                    var container = document.getElementById("trip-fields");
+
+                    if (container.childElementCount === 0) {
+
+                        var numTrips = parseInt(document.getElementById("Trips").value);
+                        for (var i = 1; i <= numTrips; i++) {
+                            var tripDiv = document.createElement("div");
+                            tripDiv.className = "form-group";
+
+                            var tripLabel = document.createElement("label");
+                            tripLabel.innerHTML = "From" + i + "";
+                            tripDiv.appendChild(tripLabel);
+
+                            var tripInput = document.createElement("input");
+                            tripInput.type = "text";
+                            tripInput.id = "From" + i;
+                            tripInput.name = "From" + i;
+                            tripInput.required = true;
+                            tripDiv.appendChild(tripInput);
+
+                            container.appendChild(tripDiv);
+
+                            var desDiv = document.createElement("div");
+                            desDiv.className = "form-group";
+
+                            var desLabel = document.createElement("label");
+                            desLabel.innerHTML = "To" + i + "";
+                            desDiv.appendChild(desLabel);
+
+                            var desInput = document.createElement("input");
+                            desInput.type = "text";
+                            desInput.id = "To" + i;
+                            desInput.name = "To" + i;
+                            desInput.required = true;
+                            desDiv.appendChild(desInput);
+
+                            container.appendChild(desDiv);
+
+                        }
+                    } else {
+
+                        var numTrips = parseInt(document.getElementById("Trips").value);
+
+                        var currentTrips = container.childElementCount / 2;
+
+                        if (numTrips < currentTrips) {
+
+                            for (var i = currentTrips; i > numTrips; i--) {
+                                container.removeChild(container.lastElementChild);
+                                container.removeChild(container.lastElementChild);
+                            }
+                        } else if (numTrips > currentTrips) {
+
+                            for (var i = currentTrips + 1; i <= numTrips; i++) {
+                                var tripDiv = document.createElement("div");
+                            tripDiv.className = "form-group";
+
+                            var tripLabel = document.createElement("label");
+                            tripLabel.innerHTML = "From" + i + "";
+                            tripDiv.appendChild(tripLabel);
+
+                            var tripInput = document.createElement("input");
+                            tripInput.type = "text";
+                            tripInput.id = "From" + i;
+                            tripInput.name = "From" + i;
+                            tripInput.required = true;
+                            tripDiv.appendChild(tripInput);
+
+                            container.appendChild(tripDiv);
+
+                            var desDiv = document.createElement("div");
+                            desDiv.className = "form-group";
+
+                            var desLabel = document.createElement("label");
+                            desLabel.innerHTML = "To" + i + "";
+                            desDiv.appendChild(desLabel);
+
+                            var desInput = document.createElement("input");
+                            desInput.type = "text";
+                            desInput.id = "To" + i;
+                            desInput.name = "To" + i;
+                            desInput.required = true;
+                            desDiv.appendChild(desInput);
+
+                            container.appendChild(desDiv);
+                            }
+                        }
+                    }
+                }
+            </script>
+
+
+
+
+
+
+        </form>
+
+    </div>
+
+    <!--<script>
+        document.getElementById("next").addEventListener("click", function(event) {
+            event.preventDefault(); // Prevent the default form submission behavior
+            window.location.href = "../results.html";
+        });
+                document.getElementById("carbon-form3").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent the default form submission behavior
+
+            const formData = new FormData(this);
+
+            // Make an AJAX POST request to the Flask API endpoint for electricity data
+            fetch('/electricity', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Assuming the response has a key 'total_carbon_emission'
+                const totalCarbonEmission = data.total_carbon_emission;
+                // Redirect to the results page with the calculated data as URL parameter
+                window.location.href = `/results?total_carbon_emission=${encodeURIComponent(totalCarbonEmission)}`;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+                });
+    </script>-->
+    <script>
+        document.getElementById("carbon-form3").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent the default form submission behavior
+          console.log("Form submitted");
+        const formData = new FormData(event.target);
+        console.log("Form data:", formData);
+        fetch('/flight2', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+        console.log("API response:", data);
+        if (data.error) {
+                        // Handle API error response if needed
+                        console.error(data.error);
+         } else {
+          const flightEmission = parseFloat(data.flight_emission);
+          const urlParams2 = new URLSearchParams(window.location.search);
+          const electricityEmission2 = parseFloat(urlParams2.get('electricity_emission'));
+          const vehicleEmission2 = parseFloat(urlParams2.get('vehicle_emission'));
+          const totalEmission2 = electricityEmission2 + vehicleEmission2 + flightEmission;
+          window.location.href = `/results.html?electricity_emission=${encodeURIComponent(electricityEmission2)}&vehicle_emission=${encodeURIComponent(vehicleEmission2)}&flight_emission=${encodeURIComponent(flightEmission)}&total_emission=${encodeURIComponent(totalEmission2)}`;
+         }
+
+         })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+    </script>
+
+</body>
+</html>
